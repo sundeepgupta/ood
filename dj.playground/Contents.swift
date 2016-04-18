@@ -21,6 +21,12 @@ class RepeatAllService: SongService {
     }
 }
 
+class ReverseService: SongService {
+    override func newSongs(originalSongs songs: [String]) -> [String] {
+        return songs.reverse()
+    }
+}
+
 class Playlist {
     private var songs = [
         "Work",
@@ -38,5 +44,7 @@ class Playlist {
 Playlist().spin(songService: RepeatEachService())
 
 Playlist().spin(songService: RepeatAllService())
+
+Playlist().spin(songService: ReverseService())
 
 Playlist().spin(songService: SongService())
