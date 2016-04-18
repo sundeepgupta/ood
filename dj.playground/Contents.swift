@@ -1,11 +1,11 @@
-enum RemixType {
-    case None
-    case RepeatEach
-    case RepeatAll
+class SongService {
+    func newSongs(originalSongs songs: [String]) -> [String] {
+        return songs
+    }
 }
 
-class RepeatEachService {
-    func newSongs(originalSongs songs: [String]) -> [String] {
+class RepeatEachService: SongService {
+    override func newSongs(originalSongs songs: [String]) -> [String] {
         var newSongs = [String]()
         for song in songs {
             newSongs.append(song)
@@ -15,8 +15,8 @@ class RepeatEachService {
     }
 }
 
-class RepeatAllService {
-    func newSongs(originalSongs songs: [String]) -> [String] {
+class RepeatAllService: SongService {
+    override func newSongs(originalSongs songs: [String]) -> [String] {
         return songs + songs
     }
 }
@@ -28,26 +28,15 @@ class Playlist {
         "Love Yourself"
     ]
     
-    func spin(remixType type: RemixType) -> String {
-        switch type {
-        case .RepeatEach:
-            let repeatEachService = RepeatEachService()
-            self.songs = repeatEachService.newSongs(originalSongs: self.songs)
-            
-        case .RepeatAll:
-            let repeatAllService = RepeatAllService()
-            self.songs = repeatAllService.newSongs(originalSongs: self.songs)
-            
-        case .None:
-            break
-        }
+    func spin(songService service: SongService) -> String {
+        self.songs = service.newSongs(originalSongs: self.songs)
         
         return self.songs.joinWithSeparator("\n")
     }
 }
 
-Playlist().spin(remixType: .RepeatEach)
+Playlist().spin(songService: RepeatEachService())
 
-Playlist().spin(remixType: .RepeatAll)
+Playlist().spin(songService: RepeatAllService())
 
-Playlist().spin(remixType: .None)
+Playlist().spin(songService: SongService())
