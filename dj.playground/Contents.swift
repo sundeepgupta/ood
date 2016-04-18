@@ -4,6 +4,23 @@ enum RemixType {
     case RepeatAll
 }
 
+class RepeatEachService {
+    func newSongs(originalSongs songs: [String]) -> [String] {
+        var newSongs = [String]()
+        for song in songs {
+            newSongs.append(song)
+            newSongs.append(song)
+        }
+        return newSongs
+    }
+}
+
+class RepeatAllService {
+    func newSongs(originalSongs songs: [String]) -> [String] {
+        return songs + songs
+    }
+}
+
 class Playlist {
     private var songs = [
         "Work",
@@ -14,15 +31,12 @@ class Playlist {
     func spin(remixType type: RemixType) -> String {
         switch type {
         case .RepeatEach:
-            var newSongs = [String]()
-            for song in self.songs {
-                newSongs.append(song)
-                newSongs.append(song)
-            }
-            self.songs = newSongs
+            let repeatEachService = RepeatEachService()
+            self.songs = repeatEachService.newSongs(originalSongs: self.songs)
             
         case .RepeatAll:
-            self.songs = self.songs + self.songs
+            let repeatAllService = RepeatAllService()
+            self.songs = repeatAllService.newSongs(originalSongs: self.songs)
             
         case .None:
             break
