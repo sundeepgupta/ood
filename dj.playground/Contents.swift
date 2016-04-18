@@ -1,4 +1,8 @@
-class SongService {
+protocol Remixer {
+    func newSongs(originalSongs songs: [String]) -> [String]
+}
+
+class SongService: Remixer {
     func newSongs(originalSongs songs: [String]) -> [String] {
         return songs
     }
@@ -21,6 +25,16 @@ class RepeatAllService: SongService {
     }
 }
 
+class DJ: Remixer {
+    func newSongs(originalSongs songs: [String]) -> [String] {
+        return [
+            "Ice Ice Baby",
+            "Can't Touch This",
+            "It Takes Two"
+        ]
+    }
+}
+
 class ReverseService: SongService {
     override func newSongs(originalSongs songs: [String]) -> [String] {
         return songs.reverse()
@@ -34,17 +48,17 @@ class Playlist {
         "Love Yourself"
     ]
     
-    func spin(songService service: SongService) -> String {
-        self.songs = service.newSongs(originalSongs: self.songs)
+    func spin(remixer remixer: Remixer) -> String {
+        self.songs = remixer.newSongs(originalSongs: self.songs)
         
         return self.songs.joinWithSeparator("\n")
     }
 }
 
-Playlist().spin(songService: RepeatEachService())
+Playlist().spin(remixer: RepeatEachService())
 
-Playlist().spin(songService: RepeatAllService())
+Playlist().spin(remixer: RepeatAllService())
 
-Playlist().spin(songService: ReverseService())
+Playlist().spin(remixer: ReverseService())
 
-Playlist().spin(songService: SongService())
+Playlist().spin(remixer: DJ())
